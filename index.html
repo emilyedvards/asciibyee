@@ -1,0 +1,694 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ascii by ee</title>
+  <meta name="description" content="ASCII art by ee, copyable as text.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23fee4e4'/%3E%3Ctext x='50%25' y='54%25' text-anchor='middle' dominant-baseline='middle' font-family='Menlo, Monaco, monospace' font-size='24' font-weight='700' fill='%237d6c6d'%3E%26lt;3%3C/text%3E%3C/svg%3E">
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #fee4e4;
+      --ink: #201818;
+      --muted: #8e7477;
+      --line: #e3c3c4;
+      --soft: #fcdcdd;
+      --accent: #7d6c6d;
+      --accent-ink: #ffffff;
+      --warn: #c94c55;
+      --shadow: 0 18px 50px rgba(125, 108, 109, 0.16);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        linear-gradient(180deg, rgba(254, 232, 232, 0.96), rgba(227, 227, 226, 0.98)),
+        repeating-linear-gradient(90deg, rgba(125, 108, 109, 0.08) 0 1px, transparent 1px 36px);
+      color: var(--ink);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      line-height: 1.5;
+    }
+
+    a {
+      color: inherit;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+
+    .site {
+      width: min(100% - 28px, 980px);
+      margin: 0 auto;
+      padding: 22px 0 56px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      min-height: 56px;
+      margin: 0 -14px 20px;
+      padding: 10px 14px;
+      background: rgba(254, 232, 232, 0.84);
+      border-bottom: 1px solid rgba(227, 195, 196, 0.9);
+      backdrop-filter: blur(14px);
+    }
+
+    .brand {
+      display: grid;
+      gap: 1px;
+    }
+
+    h1,
+    h2,
+    p {
+      margin: 0;
+    }
+
+    h1 {
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0;
+      text-transform: lowercase;
+    }
+
+    .count {
+      color: var(--muted);
+      font-size: 0.76rem;
+    }
+
+    .gallery {
+      display: grid;
+      gap: 34px;
+      padding-top: 30px;
+    }
+
+    .piece {
+      display: grid;
+      gap: 12px;
+      padding: 20px;
+      background: rgba(254, 244, 244, 0.78);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .piece-header {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--soft);
+    }
+
+    h2 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0;
+      text-transform: lowercase;
+    }
+
+    .meta {
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 0.72rem;
+    }
+
+    button {
+      flex: 0 0 auto;
+      min-width: 88px;
+      min-height: 34px;
+      padding: 8px 12px;
+      border: 1px solid var(--ink);
+      border-radius: 999px;
+      background: var(--ink);
+      color: var(--paper);
+      cursor: pointer;
+      font: inherit;
+      font-size: 0.78rem;
+      line-height: 1;
+    }
+
+    button:hover,
+    button:focus-visible {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--accent-ink);
+      outline: none;
+    }
+
+    button.is-copied {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .art-wrap {
+      overflow-x: auto;
+      padding-bottom: 4px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--accent) var(--soft);
+    }
+
+    pre {
+      width: max-content;
+      min-width: 100%;
+      margin: 0;
+      padding: 4px 0;
+      color: var(--ink);
+      font: 0.82rem/1.05 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      letter-spacing: 0;
+      white-space: pre;
+      tab-size: 2;
+    }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      margin-top: 38px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.76rem;
+    }
+
+    .custom-cursor,
+    .sparkle-trail {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 9999;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .custom-cursor {
+      width: 31px;
+      height: 42px;
+      background-image: url("data:image/svg+xml,%3Csvg width='31' height='42' viewBox='0 0 31 42' xmlns='http://www.w3.org/2000/svg' shape-rendering='crispEdges'%3E%3Cpath d='M2 2h4v2h2v2h2v2h2v2h2v2h2v2h2v2h2v2h2v2h4v6h-8v4h2v4h2v6h-8v-4h-2v-4h-2v-4h-2v10H2V2Z' fill='%23d94b78'/%3E%3Cpath d='M6 7h2v2h2v2h2v2h2v2h2v2h2v2h2v2h4v2h-8v5h2v4h2v4h-3v-4h-2v-4h-2v-4h-3v7H6V7Z' fill='%23fee4e4'/%3E%3Cpath d='M10 11h2v2h2v2h2v2h2v2h2v2h-4v5h2v4h2v4h-2v-4h-2v-4h-2v-4h-4v6h-2V11Z' fill='%23fcdcdd' opacity='.9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-size: contain;
+      opacity: 0;
+      transform: translate(0, 0);
+      transition: opacity 120ms ease, transform 120ms ease;
+    }
+
+    .custom-cursor.is-pointer {
+      width: 28px;
+      height: 34px;
+      background-image: url("data:image/svg+xml,%3Csvg width='28' height='34' viewBox='0 0 28 34' xmlns='http://www.w3.org/2000/svg' shape-rendering='crispEdges'%3E%3Cpath d='M12 2h6v12h2v-2h6v16h-2v4H8v-4H6v-4H4v-6H2v-6h6v2h2V2h2Z' fill='%23d94b78'/%3E%3Cpath d='M12 6h2v12h2v-2h2v4h2v-4h2v4h2v7h-2v2H10v-2H8v-4H6v-6h2v3h2V6h2Z' fill='%23fee4e4'/%3E%3Cpath d='M14 7h1v12h2v-2h1v5h2v-4h1v8h-1v2h-8v-2h-2v-5h2v2h2V7Z' fill='%23fcdcdd' opacity='.9'/%3E%3C/svg%3E");
+    }
+
+    body.has-custom-cursor {
+      cursor: none;
+    }
+
+    body.has-custom-cursor button,
+    body.has-custom-cursor a {
+      cursor: none;
+    }
+
+    body.has-custom-cursor .custom-cursor {
+      opacity: 1;
+    }
+
+    .sparkle-trail {
+      color: var(--warn);
+      font: 0.78rem/1 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      opacity: 0.84;
+      transform: translate(-50%, -50%);
+      animation: sparkleFade 720ms ease-out forwards;
+    }
+
+    @keyframes sparkleFade {
+      from {
+        opacity: 0.84;
+        transform: translate(-50%, -50%) scale(1);
+      }
+
+      to {
+        opacity: 0;
+        transform: translate(calc(-50% + var(--drift-x)), calc(-50% + var(--drift-y))) scale(0.82);
+      }
+    }
+
+    @media (max-width: 700px) {
+      .site {
+        width: min(100% - 18px, 980px);
+        padding-top: 10px;
+      }
+
+      .topbar {
+        align-items: start;
+        flex-direction: column;
+        margin-right: -9px;
+        margin-left: -9px;
+        padding-right: 9px;
+        padding-left: 9px;
+      }
+
+      .piece {
+        padding: 14px;
+      }
+
+      .piece-header {
+        display: contents;
+      }
+
+      .piece-header > div {
+        order: 1;
+        padding-bottom: 10px;
+        border-bottom: 1px solid var(--soft);
+      }
+
+      .art-wrap {
+        order: 2;
+      }
+
+      button {
+        order: 3;
+        justify-self: stretch;
+      }
+
+      pre {
+        font-size: 0.72rem;
+      }
+
+      footer {
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 440px) {
+      button {
+        width: 100%;
+      }
+
+      pre {
+        font-size: 0.64rem;
+      }
+    }
+
+    @media (pointer: coarse), (prefers-reduced-motion: reduce) {
+      body.has-custom-cursor {
+        cursor: auto;
+      }
+
+      body.has-custom-cursor button,
+      body.has-custom-cursor a {
+        cursor: pointer;
+      }
+
+      .custom-cursor,
+      .sparkle-trail {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="custom-cursor" aria-hidden="true"></div>
+  <main class="site">
+    <header class="topbar" aria-label="Site header">
+      <div class="brand">
+        <h1>ascii by ee</h1>
+        <p class="count">small text studies</p>
+      </div>
+    </header>
+
+    <section class="gallery" aria-label="ASCII art collection">
+      <article class="piece" id="madonnas-angels">
+        <div class="piece-header">
+          <div>
+            <h2>madonna's angels</h2>
+            <p class="meta">1,291 characters</p>
+          </div>
+          <button type="button" data-copy="madonnas-angels-art">Copy text</button>
+        </div>
+        <div class="art-wrap">
+          <pre id="madonnas-angels-art">                  __                                                       
+                _/,''`'^`,                                                 
+               /''' '`'''',\                                               
+              (((((( |\`'`,`)                                              
+              (((('')) \(___)                                              
+              ()))(')      *\                                              
+&lt;&lt;&lt;&lt;\\\\\\\\\\((((('   *  \                       ~'))',,`~                
+&lt;&lt;&lt;&lt;&lt;&lt;\\\\\\\\\(((('      -  \                   ~'~))))~,,)'`             
+ &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;\\\\\\\-\_/      ~ / \-,               ((/      ),,)~)            
+  &lt;&lt;&lt;&lt;&lt;&lt;&lt;\\\/       \    __/  /  \ &lt;&lt;&lt;\\\\\\\\\\)/        )))),`           
+    &lt;&lt;&lt;&lt;&lt;&lt;&lt;             /    /    | &lt;&lt;&lt;&lt;&lt;&lt;&lt;\\\\\/   /   *  ),,~)////////&gt;&gt;&gt;
+     &lt;&lt;&lt;&lt;,              |   \     |   &lt;&lt;&lt;&lt;&lt;&lt;\\\|    `      )))))////&gt;&gt;&gt;&gt;&gt;&gt; 
+       "        /       |    \    /     &lt;&lt;&lt;&lt;&lt;\\(__________ !)/////&gt;&gt;&gt;&gt;&gt;    
+      /        /        |     \  /     ,/                 \ ///&gt;&gt;&gt;&gt;&gt;&gt;&gt;     
+     /       _/_________|      \|     /         _____ _\ \ ;      `\&gt;      
+    /                   \       |    |        _/       \; ;         \      
+   (____________________;\______)    (_______/______________________)  ee  </pre>
+        </div>
+      </article>
+
+      <article class="piece" id="pegasus">
+        <div class="piece-header">
+          <div>
+            <h2>pegasus</h2>
+            <p class="meta">2,378 characters</p>
+          </div>
+          <button type="button" data-copy="pegasus-art">Copy text</button>
+        </div>
+        <div class="art-wrap">
+          <pre id="pegasus-art">                 \  /\                                      
+                 |\/ \\                                     
+                 /     \                                    
+                (  (*   \                                   
+                |     /  \                                  
+                |   //    \      ___________.               
+                ( .)/|     \    /   &gt;&gt;)))))))))&gt;            
+                 --  |      \  /   &gt;&gt;))))))))))&gt;            
+                     |      \./   &gt;&gt;&gt;)))))/)))&gt;             
+                     /       .   &gt;&gt;&gt;)))))))&gt;                
+                    /           &gt;&gt;&gt;&gt;                        
+                   |        \//\&gt;&gt;&gt; \___                    
+                   |         \/         \_                  
+                   |                     \\                 
+                  /  // \              /   \                
+                 (  /    \| |         /     \               
+                 | |      \ |___     /       |              
+                 | |      | |   \ \  |     / |              
+                 \ \      | |    \ \ |   / | |              
+                 |  )     | )     \ \|  /  \ |              
+                  \/     / /       \ | /    \|              
+                     ╳╳╳╳╳╳ ╳       \/ )                    
+               ╳╳╳╳╳╳╳╳╳╳╳╳ ╳╳╳     / /  )                  
+               ╳╳╳╳╳╳╳╳╳╳╳╳╳╳ ╳╳╳╳╳ ╳/ \ |                  
+               ╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳  ||                  
+               ╳ ╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳                  
+        ╊╊╊╊ ╳╳  ╳╳╳╳  ╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳ee              
+       ╊╊╊╊╊╊╊╳╳╳╳ ╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳            
+   ╊╊╊╊╊╊╊╊ ╊ ╳╊ ╊╊╳╳╳╳ ╳╳╳╳╳╳╳╳╳╳╳   ╳╳  ╊╊╳╳╳╳╳╳╳         
+╊╊╊╊╊╊╊╊╊  ╊╊ ╊╊╊╊╊╳╳╳╳╳╳ ╳╳   ╊╊╊╊╊╳╳  ╳╳╊╊╊ ╊╊╊╊╊╊        
+╊ ╊╊╊╊╊╊╊╊╊╊╊╊╊╊╊╊      ╊╊╊╊╊╊╊╊╊╊╊╊╊╊╊ ╊╊╊╊╊╊╊╊    ╊╊╊╊╊╊╊ 
+ ╊╊╊╊╊   ╊╊╊╊  ╊╊  ╊╊╊╊╊   ╊╊   ╊   ╊╊╊╊    ╊╊╊╊╊ ╊╊╊╊      
+ ╊╊     ╊╊╊     ╊  ╊╊╊╊╊╊╊╊╊╊╊ ╊╊ ╊ ╊ ╊╊╊╊ ╊╊╊╊╊╊╊╊     ╊   
+       ╊╊       ╊╊╊╊╊╊╊╊╊╊╊╊╊╊╊╊ ╊╊╊╊ ╊╊╊╊╊╊╊╊  ╊╊╊╊╊╊╊╊╊╊╊╊
+                          ╊╊  ╊╊╊╊╊          ╊╊╊╊ ╊╊        
+                          ╊╊  ╊╊╊ ╊╊╊╊╊ ╊ ╊                 
+                           ╊╊╊╊       ╊ ╊╊                  
+                               ╊╊╊╊ ╊╊    ╊╊╊╊              
+                                       ╊ ╊ ╊╊╊              </pre>
+        </div>
+      </article>
+
+      <article class="piece" id="peacocks">
+        <div class="piece-header">
+          <div>
+            <h2>the peacocks</h2>
+            <p class="meta">708 characters</p>
+          </div>
+          <button type="button" data-copy="peacocks-art">Copy text</button>
+        </div>
+        <div class="art-wrap">
+          <pre id="peacocks-art">                                         ^^
+                                   ^^    ^
+                              ,,   ^^ ^ @^   ^^
+                    ,,       //    ^ ^^^^^^ @^
+                    \\_     &lt; *)  ^^ ^ @^^^^^^^^
+                    / *\&gt;    | |  ^@^^^^^^^@^~^^^^^
+                    ;/       | \  ^^^@^^^^~^^^@^^
+                   / |       |  \ ^^^^ @^^^@^^^
+            &lt;&lt;&lt;&lt;&lt;&lt;/  |       |   \ ^@^^^^@^~^^@^^
+        &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;   )       |     `&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
+   &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;    /        |      `&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
+  //&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;     /          \__   `&gt;&gt;&gt;&gt;ee
+ ///&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;     _/              ||
+////       /____/                ||
+//        //                    __/
+         // \\
+         \_  \_</pre>
+        </div>
+      </article>
+
+      <article class="piece" id="madonna">
+        <div class="piece-header">
+          <div>
+            <h2>the small cowper madonna</h2>
+            <p class="meta">1,440 characters</p>
+          </div>
+          <button type="button" data-copy="madonna-art">Copy text</button>
+        </div>
+        <div class="art-wrap">
+          <pre id="madonna-art">               ())))));;)
+             (((()))(((((),
+            "()(        `))),
+           ()((          `))))
+           ((((           `))    ,~,',',
+           .(((            ;))  ((~()~))\\
+            ((;            |)  (~(((((~()))
+           (((((           ))  (      ((())
+          (( ((((         /|)  `        ())
+          ((( ((((`        |)   \       )
+        (((  ((((          |))          `)
+      ((((  ((     __                     \
+     (( ((((      _\   \          /
+    (( (((  \     \     \________/         |
+   ( (((     \     \_ _               /
+  ((((((      \__      \_____________/      |
+  ( ((                           /          ;
+  (((|                           |           \
+ ((((|                           |            \
+   ((|                            \           |
+   ((|        |                   ,----       ;
+   ((|        |\                 '         ___
+   ((|        | \___ _  _ _    /          /   \
+    (|        | /              |          \`   \,
+     |        |/               |      /____\`   ;
+     |        |                |     /   \  \__/
+     |         ---------,      |    /     \
+     |                  / ` __/    /  \    \
+     |                 /   (      ,    \    \
+     |                /\    ` ----╯     \    \
+     |_______________/  \_      \        `  __)
+     /ee                  \___   \      /  /
+    /                         \__|     (__/
+   /
+  /
+ /
+/</pre>
+        </div>
+      </article>
+
+      <article class="piece" id="swans">
+        <div class="piece-header">
+          <div>
+            <h2>the swans</h2>
+            <p class="meta">3,530 characters</p>
+          </div>
+          <button type="button" data-copy="swans-art" data-copy-size="8">Copy text</button>
+        </div>
+        <div class="art-wrap">
+          <pre id="swans-art">                                           ^^            , ^^^ ,                                          
+                                        `      `,      /         ^ ,                                      
+                                      /          \    /             \                                     
+                                     /          * \  / *             \                                    
+                                    '      ,,.  / | // \   /^\        \                                   
+                                   :      /   `\ ;/ \|  \ /   \        :                                  
+                                   (     |      \ \  \;  /     \       )                                  
+                                   (     |       \\\ |  /       \      )                                  
+                                   (     |        \/ |,/        |      )                                  
+                                   (     |                      /      )                                  
+                                         \                     /      /                                   
+                                    \     \                   /      /                                    
+                                     \     \                 /      /                                     
+                                      \     \               /      /                                      
+                                       \     \             /      /                                       
+                                        \     \         ,/'      /                                      / 
+  \\                                     \     \       /        /           //////\///////\)          //  
+   \\      (////////\\\\\\\/\/\\\\\       \     \     /        /  &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;////))))    ////  
+    \\\\ (&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;   \     \   /        ,&gt;=&gt;=&gt;&gt;&gt;&gt; &gt; &gt;&gt;  &gt;    &gt;&gt; &gt;&gt;&gt;&gt;&gt;&gt;)))))./))))   
+     (((((((&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;       &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;.:      \ (        ;    &gt; &gt;&gt; &gt; &gt;    &gt;&gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;/))))))    
+      (((((((\&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; &lt;&lt; &lt;         '     ))((                  &gt;  &gt;&gt;&gt;  &gt; &gt; &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;)))))))))     
+       ((((\(((\&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;    &lt;   &lt;     &lt;     ))((((            &gt;      &gt;   &gt;   &gt;&gt; &gt;&gt;&gt;&gt;&gt;)))))))))))      
+        ((((((((((&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; &lt;          ))(((               &gt;  &gt;       &gt;&gt;&gt;&gt;&gt;&gt;&gt;))))))))))))        
+         (((((((((((&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;________________)))))(((          &gt;&gt;&gt; &gt;    &gt; &gt;  &gt;&gt;&gt;&gt;&gt;))))))))))/)))         
+                                                   (((_____________________&gt;_&gt;...)))))))))))))))   ee     
+~~~~~                               ~~~                                                                  ~
+             ~~~ ~  ~~ ~ ~ ~                          ~~~~ ~ ~~ ~ ~~~~~~~~~~~~~~          ~               
+                            ~~~~~~~~~                                           ~~~~                  ~   
+    ~~~                            ~~~~~           ~~~~~~                                                 
+                              ~~~~~~             ~~                  ~~~~                      ~          
+                                    ~~~~~~                     ~          ~~~~~                           
+                     ~                                                                                    
+                                              ~               ~                                           </pre>
+        </div>
+      </article>
+
+      <article class="piece" id="bunnies">
+        <div class="piece-header">
+          <div>
+            <h2>three bunnies</h2>
+            <p class="meta">803 characters</p>
+          </div>
+          <button type="button" data-copy="bunnies-art">Copy text</button>
+        </div>
+        <div class="art-wrap">
+          <pre id="bunnies-art">             /)
+          __/ ')
+        / *   /
+       (_     )
+       __/     \_____
+      (__            \_ ,
+         `-'             )
+            \_____       |
+                 (        \
+       /)         \___     |
+    __/ ')            \ |\ \
+  / *   /              \_)\_)
+ (_     )
+ __/     \_____                 /)
+(__            \_ ,          __/ ')
+   `-'             )       / *   /
+      \_____       |      (_     )
+           (        \     __/     \_____
+            \___     |   (__            \_ ,
+                \ |\ \      `-'             )
+                 \_)\_)        \_____       |
+                                    (        \
+                                     \___     |
+                                      ee \ |\ \
+                                          \_)\_)</pre>
+        </div>
+      </article>
+    </section>
+
+    <footer>
+      <span>ee ASCII archive</span>
+      <span>copyable plain text for keeps</span>
+    </footer>
+  </main>
+
+  <script>
+    const buttons = document.querySelectorAll("[data-copy]");
+
+    function escapeHtml(text) {
+      return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function htmlCopy(text, fontSize = 12) {
+      return `<pre style="margin:0; font:${fontSize}px/1.05 Menlo, Monaco, Consolas, 'Courier New', monospace; white-space:pre;">${escapeHtml(text)}</pre>`;
+    }
+
+    async function copyArtwork(text, fontSize) {
+      if (navigator.clipboard && window.ClipboardItem && window.isSecureContext) {
+        await navigator.clipboard.write([
+          new ClipboardItem({
+            "text/plain": new Blob([text], { type: "text/plain" }),
+            "text/html": new Blob([htmlCopy(text, fontSize)], { type: "text/html" })
+          })
+        ]);
+        return;
+      }
+
+      fallbackCopy(text, fontSize);
+    }
+
+    function fallbackCopy(text, fontSize) {
+      function handleCopy(event) {
+        event.preventDefault();
+        event.clipboardData.setData("text/plain", text);
+        event.clipboardData.setData("text/html", htmlCopy(text, fontSize));
+      }
+
+      document.addEventListener("copy", handleCopy, { once: true });
+      const textarea = document.createElement("textarea");
+      textarea.value = text;
+      textarea.setAttribute("readonly", "");
+      textarea.style.position = "fixed";
+      textarea.style.top = "-999px";
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand("copy");
+      textarea.remove();
+    }
+
+    buttons.forEach((button) => {
+      button.addEventListener("click", async () => {
+        const target = document.getElementById(button.dataset.copy);
+        const text = target.textContent.replace(/\n$/, "");
+        const fontSize = Number(button.dataset.copySize || 12);
+        const original = button.textContent;
+
+        try {
+          await copyArtwork(text, fontSize);
+
+          button.textContent = "Copied";
+          button.classList.add("is-copied");
+          window.setTimeout(() => {
+            button.textContent = original;
+            button.classList.remove("is-copied");
+          }, 1400);
+        } catch {
+          button.textContent = "Select text";
+          window.setTimeout(() => {
+            button.textContent = original;
+          }, 1400);
+        }
+      });
+    });
+
+    const canUseCursor = window.matchMedia("(pointer: fine)").matches &&
+      !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (canUseCursor) {
+      const cursor = document.querySelector(".custom-cursor");
+      const sparkles = ["*", "+", "✧", ".", "::", "x"];
+      let lastSparkle = 0;
+      let sparkleIndex = 0;
+
+      document.body.classList.add("has-custom-cursor");
+
+      function moveCursor(event) {
+        cursor.style.transform = `translate(${event.clientX}px, ${event.clientY}px)`;
+        cursor.classList.toggle("is-pointer", Boolean(event.target.closest("button")));
+
+        const now = window.performance.now();
+        if (now - lastSparkle < 46) {
+          return;
+        }
+
+        lastSparkle = now;
+        const sparkle = document.createElement("span");
+        sparkle.className = "sparkle-trail";
+        sparkle.textContent = sparkles[sparkleIndex % sparkles.length];
+        sparkle.style.left = `${event.clientX}px`;
+        sparkle.style.top = `${event.clientY}px`;
+        sparkle.style.setProperty("--drift-x", `${(sparkleIndex % 3 - 1) * 8}px`);
+        sparkle.style.setProperty("--drift-y", `${-10 - (sparkleIndex % 4) * 3}px`);
+        sparkleIndex += 1;
+        document.body.appendChild(sparkle);
+        window.setTimeout(() => sparkle.remove(), 760);
+      }
+
+      window.addEventListener("pointermove", moveCursor);
+      window.addEventListener("pointerleave", () => {
+        cursor.style.opacity = "0";
+      });
+      window.addEventListener("pointerenter", () => {
+        cursor.style.opacity = "";
+      });
+    }
+  </script>
+</body>
+</html>
