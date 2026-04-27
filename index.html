@@ -306,6 +306,11 @@
         grid-template-columns: 1fr;
       }
 
+      .mini-gallery .piece {
+        height: auto;
+        min-height: 0;
+      }
+
       .piece-header {
         display: contents;
       }
@@ -320,9 +325,19 @@
         order: 2;
       }
 
+      .mini-gallery .art-wrap {
+        height: 88px;
+        min-height: 0;
+        padding-bottom: 0;
+      }
+
       button {
         order: 3;
         justify-self: stretch;
+      }
+
+      .mini-gallery button {
+        margin-top: 2px;
       }
 
       pre {
@@ -634,22 +649,14 @@
         <div class="piece-header">
           <div>
             <h2>mini miffy</h2>
-            <p class="meta">77 characters</p>
+            <p class="meta">17 characters</p>
           </div>
           <button type="button" data-copy="mini-miffy-art">Copy text</button>
         </div>
         <div class="art-wrap">
           <pre id="mini-miffy-art"> (\/)
  (..)
- /  \
-
-
-
-
-
-          &nbsp;&nbsp;
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;        &nbsp;
-      &nbsp;    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</pre>
+ /  \</pre>
         </div>
       </article>
 
@@ -866,4 +873,5 @@ ___(*&gt; ___(*&gt; ___(*&gt; ___/ \
   </script>
 </body>
 </html>
+
 
