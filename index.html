@@ -93,6 +93,21 @@
       padding-top: 30px;
     }
 
+    .section-title {
+      margin: 46px 0 -10px;
+      color: var(--muted);
+      font-size: 0.86rem;
+      font-weight: 700;
+      letter-spacing: 0;
+      text-transform: lowercase;
+    }
+
+    .mini-gallery {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      padding-top: 22px;
+    }
+
     .piece {
       display: grid;
       gap: 12px;
@@ -101,6 +116,11 @@
       border: 1px solid var(--line);
       border-radius: 8px;
       box-shadow: var(--shadow);
+    }
+
+    .mini-gallery .piece {
+      height: 210px;
+      padding: 16px;
     }
 
     .piece-header {
@@ -172,6 +192,25 @@
       tab-size: 2;
     }
 
+    .mini-gallery .art-wrap {
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+      min-height: 84px;
+      overflow: auto;
+    }
+
+    .mini-gallery pre {
+      flex: 0 0 auto;
+      min-width: auto;
+      padding: 12px 0;
+      font-size: 0.86rem;
+      line-height: 1.15;
+      overflow-wrap: normal;
+      white-space: pre;
+      word-break: normal;
+    }
+
     footer {
       display: flex;
       justify-content: space-between;
@@ -201,7 +240,8 @@
       background-size: contain;
       opacity: 0;
       transform: translate(0, 0);
-      transition: opacity 120ms ease, transform 120ms ease;
+      transition: opacity 90ms ease;
+      will-change: left, top;
     }
 
     .custom-cursor.is-pointer {
@@ -260,6 +300,10 @@
 
       .piece {
         padding: 14px;
+      }
+
+      .mini-gallery {
+        grid-template-columns: 1fr;
       }
 
       .piece-header {
@@ -323,7 +367,7 @@
     <header class="topbar" aria-label="Site header">
       <div class="brand">
         <h1>ascii by ee</h1>
-        <p class="count">small text studies</p>
+        <p class="count">text studies</p>
       </div>
     </header>
 
@@ -569,6 +613,135 @@
       </article>
     </section>
 
+    <h2 class="section-title">smaller studies</h2>
+    <section class="gallery mini-gallery" aria-label="Mini ASCII art collection">
+      <article class="piece" id="mini-two-bunnies">
+        <div class="piece-header">
+          <div>
+            <h2>mini two bunnies</h2>
+            <p class="meta">55 characters</p>
+          </div>
+          <button type="button" data-copy="mini-two-bunnies-art">Copy text</button>
+        </div>
+        <div class="art-wrap">
+          <pre id="mini-two-bunnies-art">    /)/)     (\(\
+   ( •• )   ( •• )
+   /    \ ♥ /    \</pre>
+        </div>
+      </article>
+
+      <article class="piece" id="mini-miffy">
+        <div class="piece-header">
+          <div>
+            <h2>mini miffy</h2>
+            <p class="meta">77 characters</p>
+          </div>
+          <button type="button" data-copy="mini-miffy-art">Copy text</button>
+        </div>
+        <div class="art-wrap">
+          <pre id="mini-miffy-art"> (\/)
+ (..)
+ /  \
+
+
+
+
+
+          &nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;        &nbsp;
+      &nbsp;    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</pre>
+        </div>
+      </article>
+
+      <article class="piece" id="mini-swan">
+        <div class="piece-header">
+          <div>
+            <h2>mini swan</h2>
+            <p class="meta">20 characters</p>
+          </div>
+          <button type="button" data-copy="mini-swan-art">Copy text</button>
+        </div>
+        <div class="art-wrap">
+          <pre id="mini-swan-art">   (*&gt;
+___/ \
+\  &lt; |</pre>
+        </div>
+      </article>
+
+      <article class="piece" id="mini-two-swans">
+        <div class="piece-header">
+          <div>
+            <h2>mini two swans</h2>
+            <p class="meta">38 characters</p>
+          </div>
+          <button type="button" data-copy="mini-two-swans-art">Copy text</button>
+        </div>
+        <div class="art-wrap">
+          <pre id="mini-two-swans-art">   (*&gt;♥&lt;*)
+___/ \ / \___
+\  &lt; | | &gt;  /</pre>
+        </div>
+      </article>
+
+      <article class="piece" id="mini-chickadee">
+        <div class="piece-header">
+          <div>
+            <h2>mini chickadee</h2>
+            <p class="meta">19 characters</p>
+          </div>
+          <button type="button" data-copy="mini-chickadee-art">Copy text</button>
+        </div>
+        <div class="art-wrap">
+          <pre id="mini-chickadee-art">     ( *&gt;
+   &lt;    )</pre>
+        </div>
+      </article>
+
+      <article class="piece" id="mini-duckling">
+        <div class="piece-header">
+          <div>
+            <h2>mini duckling</h2>
+            <p class="meta">13 characters</p>
+          </div>
+          <button type="button" data-copy="mini-duckling-art">Copy text</button>
+        </div>
+        <div class="art-wrap">
+          <pre id="mini-duckling-art">&lt;*)___
+ \_&gt; /</pre>
+        </div>
+      </article>
+
+      <article class="piece" id="mini-seahorse">
+        <div class="piece-header">
+          <div>
+            <h2>mini seahorse</h2>
+            <p class="meta">14 characters</p>
+          </div>
+          <button type="button" data-copy="mini-seahorse-art">Copy text</button>
+        </div>
+        <div class="art-wrap">
+          <pre id="mini-seahorse-art"> :(*&gt;
+ &lt; )
+  (</pre>
+        </div>
+      </article>
+
+      <article class="piece" id="mini-flock">
+        <div class="piece-header">
+          <div>
+            <h2>mini flock</h2>
+            <p class="meta">83 characters</p>
+          </div>
+          <button type="button" data-copy="mini-flock-art">Copy text</button>
+        </div>
+        <div class="art-wrap">
+          <pre id="mini-flock-art">                        (*&gt;
+___(*&gt; ___(*&gt; ___(*&gt; ___/ \
+\ &lt; /  \ &lt; /  \ &lt; /  \  &lt; |</pre>
+        </div>
+      </article>
+    </section>
+
     <footer>
       <span>ee ASCII archive</span>
       <span>copyable plain text for keeps</span>
@@ -660,7 +833,8 @@
       document.body.classList.add("has-custom-cursor");
 
       function moveCursor(event) {
-        cursor.style.transform = `translate(${event.clientX}px, ${event.clientY}px)`;
+        cursor.style.left = `${event.clientX}px`;
+        cursor.style.top = `${event.clientY}px`;
         cursor.classList.toggle("is-pointer", Boolean(event.target.closest("button")));
 
         const now = window.performance.now();
@@ -692,3 +866,4 @@
   </script>
 </body>
 </html>
+
